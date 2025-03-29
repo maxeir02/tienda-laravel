@@ -26,19 +26,24 @@
 
         <!-- 📦 Contenedor de Productos -->
         <div id="productos" class="row">
-            @foreach ($productos as $producto)
-                <div class="col-md-4 producto" data-categoria="{{ $producto->categoria_id }}">
-                    <div class="card">
-                        <img src="{{ asset('storage/' . $producto->imagen) }}" class="card-img-top" alt="{{ $producto->nombre }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $producto->nombre }}</h5>
-                            <p class="card-text">${{ $producto->precio }}</p>
-                            <a href="{{ route('ecommerce.productDetail', $producto->id) }}" class="btn btn-info">Ver Detalle</a>
-                            <button class="btn btn-primary" onclick="agregarAlCarrito('{{ $producto->id }}', '{{ $producto->nombre }}', '{{ $producto->precio }}')">Agregar al Carrito</button>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+        @foreach ($productos as $producto)
+    <div class="col-md-4 producto" data-categoria="{{ $producto->categoria_id }}">
+        <div class="card">
+            <img src="{{ asset('storage/' . $producto->imagen) }}" class="card-img-top" alt="{{ $producto->nombre }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ $producto->nombre }}</h5>
+                <p class="card-text">Precio: ${{ $producto->precio }}</p>
+                <a href="{{ route('ecommerce.productDetail', $producto->id) }}" class="btn btn-info">Ver Detalle</a>
+                <p class="stock" id="stock-{{ $producto->id }}">Stock: <span data-stock="{{ $producto->stock }}">{{ $producto->stock }}</span></p>
+                <button class="btn btn-primary" onclick="agregarAlCarrito('{{ $producto->id }}', '{{ $producto->nombre }}', '{{ $producto->precio }}')">
+                    Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+
         </div>
     </div>
 
@@ -47,6 +52,29 @@
     <h2>Carrito de Compras</h2>
     <ul id="cart-items"></ul>
     <p><strong>Total:</strong> $<span id="total">0</span></p>
+
+    <form action="{{ route('ecommerce.comprar') }}" method="POST">
+    @csrf
+    <input type="hidden" name="carrito" id="carritoInput">
+<script>
+    function actualizarCarritoHidden() {
+        $('#carritoInput').val(JSON.stringify(carrito));
+    }
+</script>
+
+    <button type="submit" class="btn btn-success w-100">Comprar</button>
+</form>
+
+<script>
+    function actualizarCarritoHidden() {
+        $('#carritoInput').val(JSON.stringify(carrito.map(p => p.id)));
+    }
+
+    $(document).ready(() => {
+        actualizarCarritoHidden();
+    });
+</script>
+
 
     <!-- 🔑 Botón para iniciar sesión como administrador -->
     <div class="text-center mt-3">

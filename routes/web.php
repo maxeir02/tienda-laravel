@@ -17,6 +17,9 @@ Route::get('/carrito', function () {
     return view('index');
 })->name('ecommerce.cart');
 Route::delete('/carrito/{id}', [EcommerceController::class, 'removeFromCart'])->name('ecommerce.cart.remove');
+Route::post('/comprar', [EcommerceController::class, 'comprar'])->name('ecommerce.comprar');
+Route::post('/actualizar-stock/{id}', [EcommerceController::class, 'actualizarStock']);
+
 
 
 // Rutas de autenticación para el administrador
