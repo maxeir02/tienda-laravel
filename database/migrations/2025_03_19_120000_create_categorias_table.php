@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre'); // Campo obligatorio para identificar la categoría
+            $table->text('descripcion')->nullable(); // Descripción opcional
             $table->timestamps();
         });
     }
